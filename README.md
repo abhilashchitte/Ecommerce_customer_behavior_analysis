@@ -92,7 +92,7 @@ Aspiring Tech Polymath
 
 🔗 GitHub: [Your GitHub Profile](https://github.com/abhilashchitte)
 
-🔗 LinkedIn: [Your LinkedIn Profile](www.linkedin.com/in/abhilash-ch-3a75b1271)
+🔗 LinkedIn: [Your LinkedIn Profile](https://www.linkedin.com/in/abhilash-ch-3a75b1271/)
 
 ---
 
