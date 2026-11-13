@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Behavior Analysis — Interactive Project Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--navy:#14263d;--blue:#2864a5;--teal:#1c8c88;--ink:#263445;--muted:#65758a;--bg:#f3f6fa;--line:#dce4ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.6 Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(120deg,#14263d,#245b86);color:white;padding:42px max(6vw,22px)}
+header .tag{letter-spacing:2px;text-transform:uppercase;font-size:12px;color:#c8d9eb}h1{font-size:34px;line-height:1.2;margin:10px 0}header p{max-width:850px;color:#e1ebf4}
+nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:10px max(6vw,22px);display:flex;gap:8px;flex-wrap:wrap;z-index:5}
+nav a{color:var(--blue);text-decoration:none;padding:6px 10px;border-radius:6px;font-size:13px}nav a:hover{background:#eaf1f8}
+main{max-width:1100px;margin:25px auto;padding:0 18px}.section{background:white;border:1px solid var(--line);border-radius:12px;padding:24px;margin:18px 0;box-shadow:0 3px 12px #182c4210}
+h2{color:var(--navy);margin:0 0 14px;font-size:23px}h3{color:#234b70;margin:20px 0 8px;font-size:17px}
+p{margin:8px 0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+.kpi{background:#f4f8fc;border:1px solid var(--line);padding:16px;border-radius:9px}.kpi strong{display:block;font-size:25px;color:var(--blue)}.kpi span{font-size:12px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}.chart{height:300px;position:relative}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{background:#f2f6fa;color:var(--navy)}
+details{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}summary{cursor:pointer;color:var(--blue);font-weight:bold}
+.callout{border-left:4px solid var(--teal);background:#f0f8f7;padding:12px 15px;margin:14px 0}
+select{padding:8px;border:1px solid var(--line);border-radius:6px;background:white;margin:5px 8px 12px 0}
+footer{text-align:center;color:var(--muted);padding:30px}
+@media(max-width:600px){h1{font-size:27px}.section{padding:17px}.chart{height:250px}}
+</style></head>
+<body>
+<header><div class="tag">End-to-end data analytics project</div><h1>Customer Behavior Analysis &amp;<br>Business Intelligence</h1>
+<p>An analytical workflow using Python, MySQL and Power BI to explore customer purchasing patterns, product preferences, discounts, subscription status and customer segments.</p>
+<p><b>Project report</b> · Dataset: 3,900 customer records · Currency: USD</p></header>
+<nav><a href="#summary">Executive summary</a><a href="#data">Dataset</a><a href="#python">Python</a><a href="#sql">SQL analysis</a><a href="#powerbi">Power BI</a><a href="#findings">Findings</a><a href="#limits">Limitations</a></nav>
+<main>
+<section class="section" id="summary"><h2>1. Executive Summary</h2>
+<p>This project examines a customer shopping behavior dataset containing demographic, product, purchase, shipping, discount, subscription and review information. Python is used to inspect and prepare the data, MySQL queries answer ten business questions, and Power BI provides an interactive visual summary.</p>
+<div class="grid">
+<div class="kpi"><strong>3,900</strong><span>Customer records</span></div><div class="kpi"><strong>$233,081</strong><span>Total recorded purchase amount</span></div><div class="kpi"><strong>$59.76</strong><span>Average purchase amount</span></div><div class="kpi"><strong>3.75 / 5</strong><span>Average review rating</span></div>
+</div>
+<div class="callout"><b>Headline:</b> Clothing accounts for the largest category revenue ($104,264). The dataset contains more male than female records, while average purchase amounts for subscribers and non-subscribers are very similar.</div>
+</section>
+<section class="section" id="data"><h2>2. Dataset &amp; Scope</h2>
+<p>The supplied CSV contains <b>3,900 rows and 19 columns</b>. Each row represents one customer record in the supplied dataset. The fields cover customer ID, age, gender, item, category, purchase amount, location, size, colour, season, review rating, subscription status, shipping type, discount status, previous purchases, payment method, purchase frequency and two engineered fields.</p>
+<table><tr><th>Data area</th><th>Fields / examples</th><th>Analytical use</th></tr>
+<tr><td>Customer profile</td><td>Age, gender, location, age_group</td><td>Demographic comparisons</td></tr><tr><td>Product details</td><td>Item purchased, category, size, colour, season</td><td>Product and category preferences</td></tr><tr><td>Purchase details</td><td>Purchase amount, previous purchases, frequency</td><td>Spend and repeat-purchase patterns</td></tr><tr><td>Experience &amp; fulfilment</td><td>Review rating, shipping type, payment method</td><td>Ratings and shipping comparisons</td></tr><tr><td>Promotions &amp; loyalty</td><td>Discount applied, subscription status</td><td>Discount and subscription analysis</td></tr></table>
+<p class="muted">Data quality check on the supplied CSV: no missing values were present in its 19 columns.</p>
+</section>
+<section class="section" id="python"><h2>3. Data Preparation &amp; Modeling — Python</h2>
+<p>The supplied Jupyter notebook uses Pandas and supporting libraries to load and inspect the dataset. The workflow includes:</p>
+<ul><li>Installing/importing required packages, including Pandas, gdown, PyMySQL and SQLAlchemy.</li><li>Loading the CSV and inspecting sample rows and descriptive statistics.</li><li>Checking missing values and filling missing review ratings with the median rating within each product category.</li><li>Standardizing column names to lowercase with underscores and renaming the purchase amount field to <code>purchase_amount</code>.</li><li>Creating age groups: Young Adult (up to 30), Adult (31–50), Middle aged (51–60), and Senior (61–100), based on the notebook's bin boundaries.</li><li>Mapping purchase-frequency labels to approximate day intervals: weekly 7, fortnightly/bi-weekly 14, monthly 30, quarterly/every 3 months 90, annually 365.</li><li>Checking the relationship between discount and promo-code fields, then dropping <code>promo_code_used</code>.</li><li>Exporting the prepared data to CSV.</li></ul>
+<div class="callout">The CSV supplied with this project already contains the engineered <code>age_group</code> and <code>purchase_frequency_days</code> fields and has no missing values.</div>
+</section>
+<section class="section" id="sql"><h2>4. Business Analysis — MySQL</h2>
+<p>The SQL script contains ten business questions. These queries aggregate and compare customer purchase records to support business interpretation.</p>
+<details open><summary>Q1–Q5: Revenue, discounts, ratings and shipping</summary><ol><li>Total revenue by gender.</li><li>Customers who used a discount but spent at least the overall average purchase amount.</li><li>Five products with the highest average review rating.</li><li>Average purchase amount for Standard versus Express shipping.</li><li>Subscriber and non-subscriber counts, average spend and total revenue.</li></ol></details>
+<details><summary>Q6–Q10: Promotions, segments and product preferences</summary><ol start="6"><li>Five products with the highest percentage of discounted purchases.</li><li>Customer segmentation based on previous purchases: New (1), Returning (2–10), Loyal (more than 10).</li><li>Top three purchased products within each category.</li><li>Subscription status among repeat buyers with more than five previous purchases.</li><li>Revenue contribution by age group.</li></ol></details>
+<div class="callout"><b>SQL techniques demonstrated:</b> GROUP BY, aggregate functions, subqueries, CASE expressions, common table expressions (CTEs), window functions (ROW_NUMBER), sorting and LIMIT.</div>
+</section>
+<section class="section" id="powerbi"><h2>5. Visualization — Power BI</h2>
+<p>The supplied Power BI file is the dashboard deliverable for presenting customer and purchase patterns. The project workflow uses the SQL database as the analytical source and Power BI for interactive reporting.</p>
+<p>Recommended dashboard reading sequence: start with overall purchase KPIs, compare customer demographics and age groups, review category and product performance, then examine discounts, subscription status and shipping.</p>
+<p class="muted">The exact visual titles, slicers and measure definitions inside the PBIX are not reproduced here; validate them in Power BI Desktop before publishing this report.</p>
+</section>
+<section class="section" id="findings"><h2>6. Key Findings from the Supplied CSV</h2>
+<p class="muted">The following figures are calculated directly from the provided 3,900-row CSV. Select a chart metric to explore the summary.</p>
+<label for="metric">Chart view:</label><select id="metric"><option value="category">Revenue by category</option><option value="gender">Revenue by gender</option><option value="age">Revenue by age group</option><option value="subscription">Average spend by subscription</option></select>
+<div class="chart"><canvas id="mainChart"></canvas></div>
+<div class="two">
+<div><h3>Revenue by gender</h3><table><tr><th>Gender</th><th>Revenue</th></tr><tr><td>Male</td><td>$157,890</td></tr><tr><td>Female</td><td>$75,191</td></tr></table></div>
+<div><h3>Subscription comparison</h3><table><tr><th>Status</th><th>Records</th><th>Avg. spend</th><th>Revenue</th></tr><tr><td>No</td><td>2,847</td><td>$59.87</td><td>$170,436</td></tr><tr><td>Yes</td><td>1,053</td><td>$59.49</td><td>$62,645</td></tr></table></div>
+</div>
+<h3>Additional results</h3>
+<table><tr><th>Analysis</th><th>Result</th></tr><tr><td>Discounted records</td><td>1,677 (43.0%)</td></tr><tr><td>Discount users spending at/above overall average</td><td>839 records</td></tr><tr><td>Top average-rated products</td><td>Gloves (3.86), Sandals (3.84), Boots (3.82), Hat (3.80), Skirt (3.78)</td></tr><tr><td>Average purchase — Express / Standard</td><td>$60.48 / $58.46</td></tr><tr><td>Customer segments</td><td>New: 83 · Returning: 701 · Loyal: 3,116</td></tr><tr><td>Repeat buyers (&gt;5 previous purchases)</td><td>3,476 total: 958 subscribed, 2,518 not subscribed</td></tr><tr><td>Highest-revenue age group</td><td>Adult: $87,322</td></tr></table>
+<div class="callout"><b>Interpretation:</b> Non-subscribers contribute more total revenue largely because they represent a much larger share of the records. Their average purchase amount ($59.87) is only slightly higher than subscribers ($59.49); these figures alone do not establish that subscription causes higher or lower spending.</div>
+</section>
+<section class="section" id="limits"><h2>7. Limitations &amp; Interpretation Notes</h2>
+<ul><li>The dataset contains one row per customer ID (3,900 unique IDs). The SQL script groups these records and uses previous-purchase counts; it does not contain a dated, multi-row transaction history.</li><li>Therefore, “revenue” in this report means the sum of the recorded purchase_amount field across customer records, not verified lifetime revenue.</li><li>The SQL file includes analysis queries but does not show a separate transaction-generation script. Treat transaction simulation as a stated project objective unless implemented elsewhere.</li><li>The supplied SQL defines “New” as exactly one previous purchase. A stricter first-time-customer definition (zero previous purchases) is not used by this query.</li><li>These are descriptive results. They show associations and differences, not causal effects.</li><li>The provided files do not specify a business currency conversion or a time period for the records; purchase amounts are presented as USD as indicated by the notebook's source field name.</li></ul>
+</section>
+<section class="section"><h2>8. Conclusion &amp; Recommendations</h2>
+<p>The project demonstrates a practical analytics workflow across Python, MySQL and Power BI. It organizes customer data, answers defined business questions with SQL and summarizes customer and product patterns for business users.</p>
+<ul><li>Review category-level performance, particularly Clothing, which contributes the largest recorded revenue.</li><li>Evaluate discount effectiveness using margin and conversion data before expanding promotions.</li><li>Investigate the small average-spend difference between subscriber and non-subscriber groups with additional customer-level and time-based data.</li><li>Use repeat-purchase and loyalty segments to design retention campaigns, while validating the segment definitions with the business.</li><li>Extend the dataset with order IDs, transaction dates, quantities, costs and customer history to enable true cohort, retention and profitability analysis.</li></ul>
+</section>
+<section class="section"><h2>9. Project Deliverables</h2><ul><li><b>CSB Dataset.csv</b> — customer shopping behavior dataset.</li><li><b>CSB Code.ipynb</b> — Python data inspection and preparation notebook.</li><li><b>CSB queries.sql</b> — ten SQL business analysis queries.</li><li><b>CSB Dashboard.pbix</b> — Power BI dashboard file.</li></ul>
+<p><b>Author:</b> [Your Name] &nbsp; | &nbsp; <b>Tools:</b> Python · MySQL · Power BI</p></section>
+</main><footer>Customer Behavior Analysis &amp; Business Intelligence · Interactive project report</footer>
+<script>
+const sets={
+category:{labels:['Clothing','Accessories','Footwear','Outerwear'],data:[104264,74200,36093,18524],label:'Revenue (USD)'},
+gender:{labels:['Male','Female'],data:[157890,75191],label:'Revenue (USD)'},
+age:{labels:['Adult','Young Adult','Middle aged','Senior'],data:[87322,57279,45316,43164],label:'Revenue (USD)'},
+subscription:{labels:['Not subscribed','Subscribed'],data:[59.87,59.49],label:'Average purchase amount (USD)'}
+};
+let chart;
+function draw(k){const d=sets[k];if(chart)chart.destroy();chart=new Chart(document.getElementById('mainChart'),{type:'bar',data:{labels:d.labels,datasets:[{label:d.label,data:d.data,borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y:{beginAtZero:true}}}})}
+document.getElementById('metric').addEventListener('change',e=>draw(e.target.value));draw('category');
+</script></body></html>
